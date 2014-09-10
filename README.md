@@ -4,7 +4,9 @@
 
 ## Installation
 
-Make sure Node and npm are installed.
+- Install NodeJS/npm
+- Install mongodb
+- Then run:
 
 ```
 npm install
@@ -13,8 +15,17 @@ npm install
 
 ## Running
 
+Make sure mongodb is running.
+
 ```
-node server.js
+npm start
+```
+
+
+## Testing
+
+```
+npm test
 ```
 
 
@@ -29,21 +40,18 @@ node server.js
 Retrieves a list of a user's pins.
 
 ###### URL
-`/v1/pins`
+`/v1/users/:user_id/pins`
 
 ###### Methods 
 `GET`
 
-###### Headers
-- `auth_token`
-  - Required.
-
 ###### Parameters
-- N/A
+- `userId`
+  - Required.
 
 ###### Example Request
 ```
-http "http://api.post-pin.com/v1/pins" auth_token:1234
+http "http://api.post-pin.com/v1/users/:user_id/pins"
 ```
 
 ###### Example Response
@@ -80,7 +88,7 @@ X-Powered-By: Express
 Make a new pin.
 
 ###### URL
-`/v1/pins`
+`/v1/users/:user_id/pins`
 
 ###### Methods 
 `POST`
@@ -101,7 +109,7 @@ Make a new pin.
 
 ###### Example Request
 ```
-http POST "http://api.post-pin.com/v1/pins" name="City Beer Store" location:="[37.7756991,-122.4095929]" note="Picked up some amazing beers with Tasha\!" rating=5
+http POST "http://api.post-pin.com/v1/users/1/pins" name="City Beer Store" location:="[37.7756991,-122.4095929]" note="Picked up some amazing beers with Tasha\!" rating=5
 ```
 
 ###### Example Response
@@ -124,7 +132,7 @@ X-Powered-By: Express
             ],
             "name": "City Beer Store",
             "note": "Picked up some amazing beers with Tasha!",
-            "rating": "5"
+            "rating": 5
         }
     ],
     "success": true

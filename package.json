@@ -1,17 +1,17 @@
 {
   "name": "postpin",
   "version": "1.0.0",
-  "description": "> Post push pins",
+  "description": "Post push pins",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/karma/bin/karma start",
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/akenn/postpin.git"
   },
-  "author": "",
+  "author": "Andrew Kennedy <andrew@akenn.org>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/akenn/postpin/issues"
@@ -19,6 +19,14 @@
   "homepage": "https://github.com/akenn/postpin",
   "dependencies": {
     "body-parser": "^1.8.0",
-    "express": "^4.8.8"
+    "express": "^4.8.8",
+    "mongoose": "^3.8.15",
+    "mongoose-hash": "^0.2.0",
+    "q": "^1.0.1"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "karma": "^0.12.23",
+    "sinon": "^1.10.3"
   }
 }

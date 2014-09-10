@@ -1,58 +1,115 @@
-var express = require('express'),
-  router  = express.Router(),
-  bodyParser = require('body-parser'),
-  app = express();
+// Setup
+// =======================================
 
-// parse application/json
+// Import packages
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+
+// Configure app to use bodyParser() for parsing POST body parameters
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Set route prefix
+// Middleware for all requests 
+app.use(function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  next();
+});
+
+// Variables and settings
+var port = process.env.PORT || 3000;
+var host = process.env.HOST || '0.0.0.0';
+
+
+// Routes
+// =======================================
+
+// Config
+// ------
+
+// Create router
+var router  = express.Router();
+
+// Set router prefix
 app.use('/v1', router);
 
-router.get('/pins', function(req, res){
-  // Get a list of a user's pins
-  var pins = [{
-    name: 'City Beer Store',
-    location: [37.7756991,-122.4095929],
+// Import resources
+var Users = require('./api/user');
+var Pins = require('./api/pin');
+
+
+// Routes
+// ------
+
+// Retrieve a user's pins
+router.get('/users/:user_id/pins', function(req, res){
+  var userId = req.params.user_id;
+
+  // find a user based on userId
+  Users.find(userId)
+    .then(function(user){
+      // find pins associated with that user
+      return Pins.findUserPins(user);
+    })
+    .then(function(pins){
+      // return results if there were no errors
+      return res.json({
+        success: true,
+        results: pins,
+        errors: []
+      });
+    })
+    .fail(function(error){
+      // return any errors encountered
+      res.statusCode = 400;
+      return res.json({
+        success: false,
+        results: [],
+        errors: [error]
+      });
+    });
+});
+
+// Create a pin
+router.post('/users/:user_id/pins', function(req, res){
+  var userId = req.params.user_id;
+  var pin = {
     date: new Date(),
-    note: 'Picked up some amazing beers with Tasha!',
-    rating: 5
-  }]
+    location: req.body.location,
+    name: req.body.name,
+    note: req.body.note,
+    rating: req.body.rating
+  };
 
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({
-    success: true,
-    errors: [],
-    results: pins
-  }));
+  // find a user based on userId
+  Users.find(userId)
+    .then(function(user){ 
+      // create a new pin
+      return Pins.create(user, pin);
+    })
+    .then(function(pin){
+      // return results if there were no errors
+      return res.json({
+        success: true,
+        results: [pin],
+        errors: []
+      });
+    })
+    .fail(function(error){
+      // return any errors encountered
+      res.statusCode = 400;
+      return res.json({
+        success: false,
+        results: [],
+        errors: [error]
+      });
+    });
 });
 
 
-router.post('/pins', function(req, res){
-  // Create a new pin
-  var name = req.body['name'],
-    location = req.body['location'],
-    date = new Date(),
-    note = req.body['note']
-    rating = req.body['rating'];
+// Start server
+// =======================================
 
-  var pin = [{
-    'name': name,
-    'location': location,
-    'date': date,
-    'note': note,
-    'rating': rating
-  }]
-
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({
-    success: true,
-    errors: [],
-    results: pin
-  }));
-});
-
-
-var server = app.listen(3000, '0.0.0.0', function() {
-  console.log('Listening on %s:%d', server.address().address, server.address().port);
+app.listen(port, host, function() {
+  console.log('Listening on %s:%d', host, port);
 });

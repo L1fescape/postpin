@@ -29,11 +29,92 @@ npm test
 ```
 
 
-## API
+## API Routes
 
 **Note:** The example requests below are made using [httpie](https://github.com/jakubroztocil/httpie).
 
+### User Routes
+
+
+##### Create a user
+
+###### URL
+`/v1/users`
+
+###### Method
+`POST`
+
+###### Parameters
+- `name`
+  - Required.
+
+###### Example Request
+```
+http POST "http://api.post-pin.com/v1/users" name="Andrew"
+```
+
+###### Example Response
+```
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 125
+Content-Type: application/json; charset=utf-8
+Date: Thu, 11 Sep 2014 05:39:23 GMT
+X-Powered-By: Express
+
+{
+    "errors": [],
+    "results": [
+        {
+            "name": "Andrew",
+            "user_id": "9f83a6804e73"
+        }
+    ],
+    "success": false
+}
+```
+
+
+##### Get User info
+
+###### URL
+`/v1/users/:user_id
+
+###### Method
+`GET`
+
+###### Parameters
+- N/A
+
+###### Example Request
+```
+http "http://api.post-pin.com/v1/users/9f83a6804e73"
+```
+
+###### Example Response
+```
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 125
+Content-Type: application/json; charset=utf-8
+Date: Thu, 11 Sep 2014 05:39:23 GMT
+X-Powered-By: Express
+
+{
+    "errors": [],
+    "results": [
+        {
+            "name": "Andrew",
+            "user_id": "9f83a6804e73"
+        }
+    ],
+    "success": false
+}
+```
+
+
 ### Pins
+
 
 ##### Get Pins
 
@@ -46,36 +127,35 @@ Retrieves a list of a user's pins.
 `GET`
 
 ###### Parameters
-- `userId`
-  - Required.
+- N/A
 
 ###### Example Request
 ```
-http "http://api.post-pin.com/v1/users/:user_id/pins"
+http "http://api.post-pin.com/v1/users/9f83a6804e73/pins"
 ```
 
 ###### Example Response
 ```
 HTTP/1.1 200 OK
 Connection: keep-alive
-Content-Length: 199
+Content-Length: 254
 Content-Type: application/json; charset=utf-8
-Date: Mon, 08 Sep 2014 03:06:41 GMT
-ETag: W/"c7-4092775917"
+Date: Thu, 11 Sep 2014 05:43:08 GMT
 X-Powered-By: Express
 
 {
     "errors": [],
     "results": [
         {
-            "date": "2014-09-08T03:06:41.262Z",
+            "date": "Thu Sep 11 2014 05:43:08 GMT+0000 (UTC)",
             "location": [
                 37.7756991,
                 -122.4095929
             ],
             "name": "City Beer Store",
-            "note": "Picked up some amazing beers with Tasha!",
-            "rating": 5
+            "pin_id": "1c89f4c91131",
+            "rating": 5,
+            "user_id": "9f83a6804e73"
         }
     ],
     "success": true
@@ -109,30 +189,31 @@ Make a new pin.
 
 ###### Example Request
 ```
-http POST "http://api.post-pin.com/v1/users/1/pins" name="City Beer Store" location:="[37.7756991,-122.4095929]" note="Picked up some amazing beers with Tasha\!" rating=5
+http POST "http://api.post-pin.com/v1/users/9f83a6804e73/pins" location:="[37.7756991, -122.4095929]" name="City Beer Store" rating=5
 ```
 
 ###### Example Response
 ```
 HTTP/1.1 200 OK
 Connection: keep-alive
-Content-Length: 201
+Content-Length: 254
 Content-Type: application/json; charset=utf-8
-Date: Mon, 08 Sep 2014 03:11:58 GMT
+Date: Thu, 11 Sep 2014 05:43:08 GMT
 X-Powered-By: Express
 
 {
     "errors": [],
     "results": [
         {
-            "date": "2014-09-08T03:11:58.532Z",
+            "date": "Thu Sep 11 2014 05:43:08 GMT+0000 (UTC)",
             "location": [
                 37.7756991,
                 -122.4095929
             ],
             "name": "City Beer Store",
-            "note": "Picked up some amazing beers with Tasha!",
-            "rating": 5
+            "pin_id": "1c89f4c91131",
+            "rating": 5,
+            "user_id": "9f83a6804e73"
         }
     ],
     "success": true

@@ -16,7 +16,7 @@ var PinSchema = new Schema({
   name: String,
   note: String,
   rating: Number,
-  user_id: Number
+  user_id: String
 });
 
 // Add a field to generate a new pin hash (`pin_id`) for each new pin

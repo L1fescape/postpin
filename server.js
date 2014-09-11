@@ -41,6 +41,57 @@ var Pins = require('./api/pin');
 // Routes
 // ------
 
+// Create a new user
+router.post('/users', function(req, res){
+  var user_info = {
+    name: req.body.name
+  };
+
+  Users.create(user_info)
+    .then(function(user){
+      // return newly created user
+      return res.json({
+        success: true,
+        results: [user],
+        errors: []
+      });
+    })
+    .fail(function(error){
+      // return any errors encountered
+      res.statusCode = 400;
+      return res.json({
+        success: false,
+        results: [],
+        errors: [error]
+      });
+    });
+});
+
+// Get a user's info
+router.get('/users/:user_id', function(req, res){
+  var userId = req.params.user_id;
+
+  // find a user based on userId
+  Users.find(userId)
+    .then(function(user){
+      // return user info
+      return res.json({
+        success: true,
+        results: [user],
+        errors: []
+      });
+    })
+    .fail(function(error){
+      // return any errors encountered
+      res.statusCode = 400;
+      return res.json({
+        success: false,
+        results: [],
+        errors: [error]
+      });
+    });
+});
+
 // Retrieve a user's pins
 router.get('/users/:user_id/pins', function(req, res){
   var userId = req.params.user_id;
